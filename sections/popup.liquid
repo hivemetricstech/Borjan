@@ -1,0 +1,235 @@
+{%- liquid
+  assign id = section.id
+  
+  assign heading = section.settings.heading
+  assign subheading = section.settings.subheading
+  assign disclaimer = section.settings.disclaimer
+  assign alignment = section.settings.alignment
+  assign heading_color = section.settings.heading_color
+  assign subheading_color = section.settings.subheading_color
+  
+  assign image = section.settings.image
+  assign image_position = section.settings.image_position
+
+  assign popup_delay = section.settings.popup_delay
+  assign popup_days_to_hide = section.settings.popup_days_to_hide
+-%}
+
+{% style %}
+  .popup__wrapper .title{
+      color: {{ heading_color }}
+    }
+    .popup__wrapper .subheading,
+    .popup__wrapper p{
+      color: {{ subheading_color }}
+    }
+{% endstyle %}
+
+<div
+  data-popup
+  class="
+    popup__wrapper
+    {% if image != blank %} has-image {% endif %}
+    image-position-{{ image_position }}
+  "
+>
+    <button class="close popup__close" aria-label="close">
+      {% render 'close_icon', %}
+    </button>
+
+  <div class="popup__inner is-flex {% if image == blank %} is-align-center {% endif %} text-align-{{ alignment }} image-position-{{ image_position }}">
+    {% if image != blank %}
+      <div class="popup__image-wrap">
+        <img class="popup__image" src="{{ image | image_url }}">
+      </div>
+    {% endif %}
+
+    <div class="popup__content">
+      <div class="popup__header">
+        {% if heading %}
+          <h3 class="popup__title title">{{ heading }}</h3>
+        {% endif %}
+
+        {% if subheading %}
+          <div class="popup__text subtitle">
+            {{ subheading }}
+          </div>
+        {% endif %}
+      </div>
+      <div class="popup__newsletter newsletter-section--popup">
+        {% render 'newsletter-form' %}
+      </div>
+      
+      {% if disclaimer %}
+        <div class="popup__text disclaimer">
+          {{ disclaimer }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<script>
+
+  const cookieValue = Cookies.get('popup');
+  const cookieEnabled = {{ popup_days_to_hide }} != 0 ? true : false;
+
+  (() => {
+    if (cookieEnabled && cookieValue === 'opened') {
+      return false;
+    } else {
+      setTimeout(() => { 
+        document.querySelector(".popup-section.jsPopup").classList.remove("close");
+      }, {{ popup_delay }} * 1000);
+    }
+  })();
+
+
+  if (cookieEnabled) {
+    Cookies.set('popup', 'opened', { expires: parseInt( {{ popup_days_to_hide}} ) });
+  }
+  
+</script>
+
+{% schema %}
+{
+  "name": "Popup",
+  "class": "popup-section jsPopup close",
+  "settings": [    
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Subscribe"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "<p>Sign up to get the latest on sales, new releases and more …</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "disclaimer",
+      "label": "Disclaimer",
+      "default": "<p>Your Information will never be shared with any third party.</p>"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Subheading",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Feature image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "600 x 875px recommended."
+    },    
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Popup display"
+    },
+    {
+      "type": "range",
+      "id": "popup_delay",
+      "label": "Popup delay",
+      "min": 0,
+      "max": 120,
+      "step": 2,
+      "default": 2,
+      "unit": "sec"
+    },
+    {
+      "type": "select",
+      "id": "popup_days_to_hide",
+      "label": "Days until popup is displayed again",
+      "options": [
+        {
+          "value": "0",
+          "label": "Test Mode"
+        },
+        {
+          "value": "2",
+          "label": "2 days"
+        },
+        {
+          "value": "7",
+          "label": "7 days"
+        },
+        {
+          "value": "14",
+          "label": "14 days"
+        },
+        {
+          "value": "30",
+          "label": "30 days"
+        },
+        {
+          "value": "90",
+          "label": "90 days"
+        },
+        {
+          "value": "365",
+          "label": "365 days"
+        }
+      ],
+      "default": "30"
+    }
+  ]
+}
+{% endschema %}

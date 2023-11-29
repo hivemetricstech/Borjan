@@ -1,0 +1,25 @@
+.section.announcement_bar .slideshow__controls.slider-buttons {
+    display: none;
+}
+
+.announcement-bar .page-width {
+    max-width: none;
+    padding: 0 15px;
+    background: #000000;
+}
+
+.announcement-bar__message {
+    font-size: 11px;
+    line-height: 19.25px;
+    padding: 8px 0;
+    color: #FFF;
+    font-weight: normal;
+}
+
+.announcement-bar {
+    max-height: 35px;
+}
+
+.announcement-bar__message marquee {
+    vertical-align: middle;
+}

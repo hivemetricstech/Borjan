@@ -1,0 +1,20 @@
+<div class="product__variant--sizes-wrap">
+  {% assign colorslist = ''  %}
+  {% for opt in product.options_with_values %}
+      {% if opt.name == 'color' or opt.name == 'Color' %}
+          {% for val in opt.values %}
+              {% assign colorslist = colorslist | append : val | append : ',' %}
+          {% endfor %}
+      {% endif %}
+  {% endfor %}
+  {% assign colorss = colorslist | split : ',' %}
+  {% for c in colorss %}
+  <div class="product__variant--sizes {{ c | handle}}" data-color-value="{{ c | handle}}">
+      {% for v in product.variants %}
+          {% if v.option1 == c %}
+              <span class="product__variant--size {% if v.available == false %}soldout{% endif %} {{ v.option1 | downcase }}" ><a data-url="{{ v.url }}" href="{{ v.url | within: collection }}">{{ v.option2 }}</a></span>
+          {% endif %}
+      {% endfor %}
+  </div>
+  {% endfor %}
+</div>

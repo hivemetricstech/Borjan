@@ -1,0 +1,57 @@
+<div class="sidebar-tag__heading">
+  <span>{{ block.settings.title | escape }}</span>
+</div>
+{% assign filter_tags = block.settings.filter_tags | split: ',' %}
+{% assign current_tags = current_tags | join:';;' | replace: '  ',' ' | split: ';;' %}
+<div class="sidebar-block__content" {% if settings.toggle_sidebar and block.settings.title != blank %}data-sidebar-block__content--collapsible{% endif %}>
+  <ul class="sidebar-block__tag-filter list-unstyled sidebar-block__tag-filter--{{ block.id }}">
+    <div class="filter-all-tags color-filter--false {% if block.settings.title == 'By Color' or block.settings.title == 'Color' %}color-block-main{% endif %}">
+      {% comment %} Loop through tag names in theme editor settings {% endcomment %}
+      {% assign image_name = '' %}
+      {% for tag in filter_tags %}
+        {% for collection_tag in collection.tags %}
+          {% capture handle_tag %}{{- tag | handleize -}}{% endcapture %}
+          {% capture formatted_collection_tag %}{{ collection_tag | handleize }}{% endcapture %}
+          {% if handle_tag == formatted_collection_tag %}            
+            {% assign tag_in_collection = true %}
+
+              {% if block.settings.title == 'By Color' or block.settings.title == 'Color' %}
+                {% assign image_name = tag | replace: ' ', '-' | replace: '/', '-' | downcase %}
+              {% endif %}
+            
+              {% comment %} Display regular item {% endcomment %}                 
+              {% if current_tags contains tag %}          
+                  <li class="tag-filter__item tag-filter__item--regular active ">
+                    {% if block.settings.title == 'By Color' or block.settings.title == 'Color' %}
+                      <span class="bg_color_{{ image_name }} color__tag">{{ tag | link_to_remove_tag: tag }}</span>                      
+                    {% else %}
+                      <span>{{ tag | link_to_remove_tag: tag }}</span>
+                    {% endif %}
+                  </li>
+              {% else %}
+                  <li class="tag-filter__item tag-filter__item--regular {% if block.settings.title == 'By Size' or block.settings.title == 'Size' %}Size-block{% endif %} {% if block.settings.title == 'By Price' or block.settings.title == 'Price' %}price-range{% endif %} {% if block.settings.title == 'By Color' or block.settings.title == 'Color' %}color-block{% endif %}">
+                    {% if block.settings.title == 'By Color' or block.settings.title == 'Color' %}
+                      
+                      <span class="tooltip " {% if block.settings.title == 'By Color' or block.settings.title == 'Color' %}data-tooltip-length="medium" data-tooltip-pos="up" data-tooltip="{{ tag }}"{% endif %}>
+                      <span class="bg_color_{{ image_name }} color__tag">{{ tag | link_to_add_tag: tag }}</span>  
+                      </span>
+                    {% else %}
+                      <span>{{ tag | link_to_add_tag: tag }}</span>
+                    {% endif %}
+                  </li>
+              {% endif %}
+            {% break %}
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+      {% if tag_in_collection == blank %}
+        {% comment %} If there are no tags, hide block {% endcomment %}
+        {% style %}
+          #shopify-section-{{ block.id }} {
+            display: none;
+          }
+        {% endstyle %}
+      {% endif %}
+    </div>
+  </ul>
+</div>

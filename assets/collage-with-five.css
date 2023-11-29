@@ -1,0 +1,117 @@
+.collage__flex-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: start;
+}
+
+.collage__items--left {
+    width: calc(25% - 20px);
+    margin-right: 20px;
+}
+
+.collage__items--left .collage-card-wrapper:nth-child(2n){
+    margin-top: 20px;
+}
+
+.collage__flex-wrap .collage-card-wrapper .media > * {
+    position:static !important;
+    transition: 0.6s;
+}
+
+.collage__items--center {
+    width: 50%;
+}
+
+.collage__items--right {
+    width: calc(25% - 20px);
+    margin-left: 20px;
+}
+
+.collage__items--right .collage-card-wrapper:nth-child(2n) {
+    margin-top: 20px;
+}
+
+.collage-with-five_images .collage-wrapper-title {
+    display: flex;
+    align-items: center;
+}
+
+.collage-with-five_images .collage-wrapper-title span {
+    margin: 0 30px;
+}
+
+.collage-with-five_images .collage-wrapper-title:before, 
+.collage-with-five_images .collage-wrapper-title:after {
+    content: '';
+    width: 60px;
+    display: inline-block;
+    height: 2px;
+    background: #222;
+}
+
+.collage-with-five_images .collage-wrapper-title {
+    margin-bottom: 30px;
+}
+
+.collage__flex-wrap .collage-card-wrapper .media {
+    overflow: hidden;
+}
+
+.collage__flex-wrap .collage-card-wrapper:hover .media img {
+    transform: scale(1.1);
+}
+
+.collage__items--center .media {
+    max-height: 611px;
+}
+
+@media only screen and (max-width: 767px){
+  .collage-with-five_images .collage-wrapper-title span {
+      margin: 0 15px;
+  }
+  
+  .collage-with-five_images .collage-wrapper-title:before, 
+  .collage-with-five_images .collage-wrapper-title:after {
+      width: 30px;
+  }
+  
+  .collage__flex-wrap {
+      flex-direction: column;
+      flex-wrap: nowrap;
+  }
+  
+  .collage__items--left,
+  .collage__items--right {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0;
+      margin-bottom: 20px;
+  }
+  
+  .collage__items--left .collage-card-wrapper,
+  .collage__items--right .collage-card-wrapper {
+      width: calc(50% - 10px);
+  }
+  
+  .collage__items--left .collage-card-wrapper:nth-child(2n),
+  .collage__items--right .collage-card-wrapper:nth-child(2n) {
+      margin-top: 0;
+      margin-left: 10px;
+  }
+  
+  .collage__items--left .collage-card-wrapper:first-child,
+  .collage__items--right .collage-card-wrapper:first-child{
+      margin-right: 10px;
+  }
+  
+  .collage__items--center {
+      width: 100%;
+  }
+  
+  .collage__items--right {
+      margin-bottom: 0;
+      margin-top: 20px;
+  }
+}
